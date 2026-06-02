@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trairr MM Services - Trusted Middleman Community</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 50%, rgba(245, 185, 50, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(245, 185, 50, 0.08) 0%, transparent 50%);
+            animation: bgShift 15s ease-in-out infinite;
+        }
+        @keyframes bgShift { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(245, 185, 50, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(245, 185, 50, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #f5b932;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(245, 185, 50, 0.8);
+            animation: float 20s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-in-out 1.5s forwards;
+        }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+        .loader-spinner {
+            width: 100px;
+            height: 100px;
+            border: 4px solid rgba(245, 185, 50, 0.2);
+            border-top: 4px solid #f5b932;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 40px rgba(245, 185, 50, 0.6);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-text {
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #f5b932;
+            letter-spacing: 3px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            border-bottom: 2px solid rgba(245, 185, 50, 0.3);
+            box-shadow: 0 0 30px rgba(245, 185, 50, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .brand-name {
+            font-size: 22px;
+            font-weight: 900;
+            color: #f5b932;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(245, 185, 50, 0.5);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+        @keyframes textGlow { 0%, 100% { text-shadow: 0 0 20px rgba(245, 185, 50, 0.5); } 50% { text-shadow: 0 0 40px rgba(245, 185, 50, 0.8); } }
+        nav ul {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            transition: 0.3s ease;
+            position: relative;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+        nav ul li a::before {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f5b932, #ffc857);
+            transition: 0.3s ease;
+            box-shadow: 0 0 10px rgba(245, 185, 50, 0.5);
+        }
+        nav ul li a:hover {
+            color: #f5b932;
+            text-shadow: 0 0 10px rgba(245, 185, 50, 0.6);
+        }
+        nav ul li a:hover::before { width: 100%; }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 120px 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(245, 185, 50, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(120px);
+            animation: pulse-hero 4s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes pulse-hero { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 0.8; } }
+        .hero h1 {
+            font-size: clamp(45px, 8vw, 90px);
+            margin: 30px 0;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #f5b932, #ffc857, #f5b932);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleWave 2s ease-in-out infinite, shimmer 3s linear infinite;
+            filter: drop-shadow(0 0 20px rgba(245, 185, 50, 0.5));
+        }
+        @keyframes titleWave { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        @keyframes shimmer { to { background-position: 200% center; } }
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(245, 185, 50, 0.9);
+            margin: 25px 0 50px;
+            max-width: 700px;
+            line-height: 1.8;
+            min-height: 70px;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .hero-buttons {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+        .btn {
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-weight: 900;
+            text-decoration: none;
+            transition: 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: 0.3s ease;
+            z-index: -1;
+        }
+        .btn:hover::before { left: 100%; }
+        .btn-primary {
+            background: linear-gradient(135deg, #f5b932, #ffc857);
+            color: #000;
+            box-shadow: 0 0 30px rgba(245, 185, 50, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 50px rgba(245, 185, 50, 0.7);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 3px solid #f5b932;
+            color: #f5b932;
+            box-shadow: 0 0 20px rgba(245, 185, 50, 0.3);
+        }
+        .btn-secondary:hover {
+            background: rgba(245, 185, 50, 0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 0 40px rgba(245, 185, 50, 0.6);
+        }
+        .section {
+            padding: 120px 8%;
+            position: relative;
+            z-index: 1;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 55px;
+            color: #f5b932;
+            margin-bottom: 70px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            animation: titleSlide 0.8s ease-out;
+            text-shadow: 0 0 30px rgba(245, 185, 50, 0.3);
+        }
+        @keyframes titleSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 150px;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #f5b932, transparent);
+            margin: 25px auto 0;
+            box-shadow: 0 0 20px rgba(245, 185, 50, 0.5);
+            animation: expand 0.8s ease-out 0.3s both;
+        }
+        @keyframes expand { from { width: 0; } to { width: 150px; } }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+        .card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 45px;
+            border-radius: 20px;
+            border: 2px solid rgba(245, 185, 50, 0.3);
+            transition: 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: cardSlide 0.8s ease-out both;
+        }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes cardSlide { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(245, 185, 50, 0.2), transparent);
+            animation: shine 3s infinite;
+            z-index: 1;
+        }
+        @keyframes shine { 0% { transform: translate(-100%, -100%) rotate(45deg); } 100% { transform: translate(100%, 100%) rotate(45deg); } }
+        .card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(245, 185, 50, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: 0.3s ease;
+        }
+        .card:hover::after { opacity: 1; }
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(245, 185, 50, 0.7);
+            box-shadow: 0 30px 60px rgba(245, 185, 50, 0.3);
+        }
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+        .card h3 {
+            color: #f5b932;
+            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            animation: colorShift 3s ease-in-out infinite;
+        }
+        @keyframes colorShift { 0%, 100% { color: #f5b932; text-shadow: 0 0 10px rgba(245, 185, 50, 0.5); } 50% { color: #ffc857; text-shadow: 0 0 20px rgba(245, 185, 50, 0.8); } }
+        .card p {
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.8;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .card b {
+            color: #f5b932;
+            display: block;
+            margin-top: 20px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        .stat-number {
+            font-size: 55px;
+            font-weight: 900;
+            color: #f5b932;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(245, 185, 50, 0.6);
+            animation: countUp 2s ease-out;
+        }
+        @keyframes countUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        footer {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.95));
+            padding: 80px 8%;
+            text-align: center;
+            border-top: 2px solid rgba(245, 185, 50, 0.3);
+            z-index: 1;
+            box-shadow: 0 -10px 40px rgba(245, 185, 50, 0.1);
+        }
+        footer h2 {
+            color: #f5b932;
+            margin-bottom: 20px;
+            font-size: 36px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(245, 185, 50, 0.4);
+        }
+        footer p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 15px; padding: 15px 5%; }
+            nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 100px 20px 20px; }
+            .hero h1 { font-size: 45px; }
+            .section-title { font-size: 40px; }
+            .cards-grid { grid-template-columns: 1fr; gap: 30px; }
+            .btn { padding: 16px 30px; font-size: 14px; }
+            footer { padding: 50px 5%; }
+        }
+        @media (max-width: 480px) {
+            nav ul li a { font-size: 12px; }
+            .hero h1 { font-size: 32px; }
+            .section-title { font-size: 28px; }
+            .card { padding: 30px; }
+            .card h3 { font-size: 20px; }
+            .stat-number { font-size: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">TRAIRR MM</div>
+    </div>
+    <nav>
+        <div class="logo-section">
+            <span class="brand-name">TRAIRR MM</span>
+        </div>
+        <ul>
+            <li><a href="#home">HOME</a></li>
+            <li><a href="#stats">STATS</a></li>
+            <li><a href="#services">SERVICES</a></li>
+            <li><a href="#giveaways">GIVEAWAYS</a></li>
+            <li><a href="#feedback">FEEDBACK</a></li>
+        </ul>
+    </nav>
+    <section id="home" class="hero">
+        <h1>TRAIRR MM SERVICES</h1>
+        <p class="hero-subtitle" id="typing"></p>
+        <div class="hero-buttons">
+            <a href="https://discord.gg/CX6bP7aVCE" target="_blank" class="btn btn-primary">JOIN DISCORD</a>
+            <a href="#services" class="btn btn-secondary">EXPLORE SERVICES</a>
+        </div>
+    </section>
+    <section id="stats" class="section">
+        <h2 class="section-title">SERVER STATISTICS</h2>
+        <div class="cards-grid">
+            <div class="card"><div class="card-content"><div class="stat-number" id="memberCount">0</div><h3>Active Members</h3><p>Join our growing community of trusted traders</p></div></div>
+            <div class="card"><div class="card-content"><div class="stat-number">15K+</div><h3>Community Vouches</h3><p>Verified positive feedback from thousands</p></div></div>
+            <div class="card"><div class="card-content"><div class="stat-number">50K+</div><h3>Successful Trades</h3><p>Secure transactions completed</p></div></div>
+            <div class="card"><div class="card-content"><div class="stat-number">99.9%</div><h3>Success Rate</h3><p>Industry-leading reliability</p></div></div>
+        </div>
+    </section>
+    <section id="services" class="section">
+        <h2 class="section-title">OUR PREMIUM SERVICES</h2>
+        <div class="cards-grid">
+            <div class="card"><div class="card-content"><h3>⚡ AUTO MM BOT</h3><p>Safe money transactions without scams. 100% secure with refund guarantee.</p></div></div>
+            <div class="card"><div class="card-content"><h3>🛡️ TRUSTED MIDDLEMAN</h3><p>Professional human middleman service for every trade.</p></div></div>
+            <div class="card"><div class="card-content"><h3>🔒 SECURE TRADING</h3><p>Complete protection against scams and unsafe transactions.</p></div></div>
+            <div class="card"><div class="card-content"><h3>🌟 24/7 SUPPORT</h3><p>Quick help from our dedicated team anytime.</p></div></div>
+        </div>
+    </section>
+    <section id="giveaways" class="section">
+        <h2 class="section-title">GIVEAWAYS & REWARDS</h2>
+        <div class="cards-grid">
+            <div class="card"><div class="card-content"><h3>🎁 FRUIT GIVEAWAYS</h3><p>Regular giveaways for active community members.</p></div></div>
+            <div class="card"><div class="card-content"><h3>💎 ROBUX EVENTS</h3><p>Special Robux rewards and exclusive events.</p></div></div>
+            <div class="card"><div class="card-content"><h3>🏆 PREMIUM REWARDS</h3><p>Large community milestone celebration rewards.</p></div></div>
+            <div class="card"><div class="card-content"><h3>🎟️ SPECIAL EVENTS</h3><p>Seasonal competitions and community activities.</p></div></div>
+        </div>
+    </section>
+    <section id="feedback" class="section">
+        <h2 class="section-title">COMMUNITY FEEDBACK</h2>
+        <div class="cards-grid">
+            <div class="card"><div class="card-content"><h3>⭐⭐⭐⭐⭐</h3><p>"Auto MM was incredibly fast and secure!"</p><b>- Shadow</b></div></div>
+            <div class="card"><div class="card-content"><h3>⭐⭐⭐⭐⭐</h3><p>"Best MM server I have used. Very professional!"</p><b>- Phoenix</b></div></div>
+            <div class="card"><div class="card-content"><h3>⭐⭐⭐⭐⭐</h3><p>"Won a giveaway and received everything instantly!"</p><b>- Dragon</b></div></div>
+            <div class="card"><div class="card-content"><h3>⭐⭐⭐⭐⭐</h3><p>"Highly trusted server with excellent support!"</p><b>- Ace</b></div></div>
+        </div>
+    </section>
+    <footer>
+        <h2>TRAIRR MM SERVICES</h2>
+        <p>Trusted MM • AutoMM • 15K+ Vouches • Giveaways • Secure Trading</p>
+        <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 40px;">Professional middleman services</p>
+        <a href="https://discord.gg/CX6bP7aVCE" target="_blank" class="btn btn-primary" style="display: inline-block;">JOIN OUR DISCORD</a>
+    </footer>
+    <script>
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                document.getElementById("loader").style.display = "none";
+            }, 1500);
+        });
+        const text = "Trusted MM • AutoMM • 15K+ Vouches • Giveaways • Secure Trading • Professional Support";
+        let i = 0;
+        function typeText() {
+            if (i < text.length) {
+                document.getElementById("typing").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeText, 40);
+            }
+        }
+        typeText();
+        let target = 9520;
+        let current = 0;
+        let counter = document.getElementById("memberCount");
+        let interval = setInterval(() => {
+            current += 120;
+            if (current >= target) {
+                current = target;
+                clearInterval(interval);
+            }
+            counter.innerHTML = current + "+";
+        }, 15);
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
